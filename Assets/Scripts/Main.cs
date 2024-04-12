@@ -6,8 +6,8 @@ using log4net;
 using log4net.Appender;
 using UnityEngine;
 
-// todo 로거 쓰레드 생성하고 비동기 파일 입출력
-public class start : MonoBehaviour
+// todo 로거 쓰레드 생성하고 비동기 파일 입출
+public class Main : MonoBehaviour
 {
     public static ILog iLog;
     // Start is called before the first frame update
@@ -61,7 +61,7 @@ public class start : MonoBehaviour
         XmlAttribute fileAppender_name = xmlDoc.CreateAttribute("name");
         fileAppender_name.Value = "FileAppenderXml";
         XmlAttribute fileAppender_type = xmlDoc.CreateAttribute("type");
-        fileAppender_type.Value = "log4net.Appender.FileAppender";
+        fileAppender_type.Value = "log4net.Appender.RollingFileAppender";
         fileAppender.Attributes.Append(fileAppender_name);
         fileAppender.Attributes.Append(fileAppender_type);
 
@@ -70,9 +70,21 @@ public class start : MonoBehaviour
         XmlAttribute fileAppender_file_type = xmlDoc.CreateAttribute("type");
         fileAppender_file_type.Value = "log4net.Util.PatternString";
         XmlAttribute fileAppender_file_value = xmlDoc.CreateAttribute("value");
-        fileAppender_file_value.Value = Path.Combine(Application.persistentDataPath, "Log.xml");
+        fileAppender_file_value.Value = Application.persistentDataPath+"/log4net4unity/";
         fileAppender_file.Attributes.Append(fileAppender_file_type);
         fileAppender_file.Attributes.Append(fileAppender_file_value);
+
+        // File appender - datePattern
+        XmlNode fileAppender_datePattern = xmlDoc.CreateElement("datePattern");
+        XmlAttribute fileAppender_datePattern_value = xmlDoc.CreateAttribute("value");
+        fileAppender_datePattern_value.Value = "yyyy-MM-dd'_log.xml'";
+        fileAppender_datePattern.Attributes.Append(fileAppender_datePattern_value);
+
+        // File appender - staticLogFileName
+        XmlNode fileAppender_staticLogFileName = xmlDoc.CreateElement("staticLogFileName");
+        XmlAttribute fileAppender_staticLogFileName_value = xmlDoc.CreateAttribute("value");
+        fileAppender_staticLogFileName_value.Value = "false";
+        fileAppender_staticLogFileName.Attributes.Append(fileAppender_staticLogFileName_value);
 
         // File appender - appendToFile
         XmlNode fileAppender_appendToFile = xmlDoc.CreateElement("appendToFile");
@@ -94,6 +106,7 @@ public class start : MonoBehaviour
         fileAppender_layout_locationInfo.Attributes.Append(fileAppender_layout_locationInfo_value);
         fileAppender_layout.AppendChild(fileAppender_layout_locationInfo);
 
+
         // File appender - parameter
         XmlNode fileAppender_parameter = xmlDoc.CreateElement("param");
         XmlAttribute fileAppender_parameter_name = xmlDoc.CreateAttribute("name");
@@ -105,6 +118,8 @@ public class start : MonoBehaviour
 
         // Bind
         fileAppender.AppendChild(fileAppender_file);
+        fileAppender.AppendChild(fileAppender_datePattern);
+        fileAppender.AppendChild(fileAppender_staticLogFileName);
         fileAppender.AppendChild(fileAppender_appendToFile);
         fileAppender.AppendChild(fileAppender_layout);
         fileAppender.AppendChild(fileAppender_parameter);
