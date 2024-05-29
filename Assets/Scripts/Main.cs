@@ -31,7 +31,7 @@ public class Main : MonoBehaviour
         iLog.Info("world");
         iLog.Warn("iam ");
         iLog.Error("cho");
-        LogManager.Flush(0);
+        LogManager.Flush(1000000);
 
     }
 
@@ -92,13 +92,29 @@ public class Main : MonoBehaviour
         fileAppender_appendToFile_value.Value = "true";
         fileAppender_appendToFile.Attributes.Append(fileAppender_appendToFile_value);
 
+        // File appender - rollingStyle
+        XmlNode fileAppender_rollingStyle = xmlDoc.CreateElement("rollingStyle");
+        XmlAttribute fileAppender_rollingStyle_value = xmlDoc.CreateAttribute("value");
+        fileAppender_rollingStyle_value.Value = "Composite";
+        fileAppender_rollingStyle.Attributes.Append(fileAppender_rollingStyle_value);
+
+        // File appender - maxSizeRollBackups
+        XmlNode fileAppender_maxSizeRollBackups = xmlDoc.CreateElement("maxSizeRollBackups");
+        XmlAttribute fileAppender_maxSizeRollBackups_value = xmlDoc.CreateAttribute("value");
+        fileAppender_maxSizeRollBackups_value.Value = "3";
+        fileAppender_maxSizeRollBackups.Attributes.Append(fileAppender_maxSizeRollBackups_value);
+
+        // File appender - maximumFileSize
+        XmlNode fileAppender_maximumFileSize = xmlDoc.CreateElement("maximumFileSize");
+        XmlAttribute fileAppender_maximumFileSize_value = xmlDoc.CreateAttribute("value");
+        fileAppender_maximumFileSize_value.Value = "2" + "MB";
+        fileAppender_maximumFileSize.Attributes.Append(fileAppender_maximumFileSize_value);
+
         // File appender - layout
         XmlNode fileAppender_layout = xmlDoc.CreateElement("layout");
         XmlAttribute fileAppender_layout_type = xmlDoc.CreateAttribute("type");
         fileAppender_layout_type.Value = "log4net.Layout.XmlLayoutSchemaLog4j";
         fileAppender_layout.Attributes.Append(fileAppender_layout_type);
-
-
         // File appender - layout - locationInfo
         XmlNode fileAppender_layout_locationInfo = xmlDoc.CreateElement("locationInfo");
         XmlAttribute fileAppender_layout_locationInfo_value = xmlDoc.CreateAttribute("value");
@@ -121,6 +137,9 @@ public class Main : MonoBehaviour
         fileAppender.AppendChild(fileAppender_datePattern);
         fileAppender.AppendChild(fileAppender_staticLogFileName);
         fileAppender.AppendChild(fileAppender_appendToFile);
+        fileAppender.AppendChild(fileAppender_rollingStyle);
+        fileAppender.AppendChild(fileAppender_maxSizeRollBackups);
+        fileAppender.AppendChild(fileAppender_maximumFileSize);
         fileAppender.AppendChild(fileAppender_layout);
         fileAppender.AppendChild(fileAppender_parameter);
 
